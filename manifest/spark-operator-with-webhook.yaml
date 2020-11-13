@@ -38,22 +38,22 @@ spec:
     spec:
       serviceAccountName: sparkoperator
       volumes:
-      - name: webhook-certs
-        secret:
-          secretName: spark-webhook-certs
-      containers:
-      - name: sparkoperator
-        image: gcr.io/spark-operator/spark-operator:v1beta2-1.2.0-3.0.0
-        imagePullPolicy: Always
-        volumeMounts:
         - name: webhook-certs
-          mountPath: /etc/webhook-certs
-        ports:
-        - containerPort: 8080
-        args:
-        - -logtostderr
-        - -enable-webhook=true
-        - -v=2
+          secret:
+            secretName: spark-webhook-certs
+      containers:
+        - name: sparkoperator
+          image: cargo.dev.caicloud.xyz/release/spark-operator:v3.0.0-kz-20201113
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook-certs
+          ports:
+            - containerPort: 8080
+          args:
+            - -logtostderr
+            - -enable-webhook=true
+            - -v=2
 ---
 apiVersion: batch/v1
 kind: Job
@@ -74,10 +74,10 @@ spec:
       serviceAccountName: sparkoperator
       restartPolicy: Never
       containers:
-      - name: main
-        image: gcr.io/spark-operator/spark-operator:v1beta2-1.2.0-3.0.0
-        imagePullPolicy: IfNotPresent
-        command: ["/usr/bin/gencerts.sh", "-p"]
+        - name: main
+          image: cargo.dev.caicloud.xyz/release/spark-operator:v3.0.0-kz-20201113
+          imagePullPolicy: IfNotPresent
+          command: ["/usr/bin/gencerts.sh", "-p"]
 ---
 kind: Service
 apiVersion: v1

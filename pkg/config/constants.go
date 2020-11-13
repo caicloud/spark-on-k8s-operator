@@ -169,6 +169,15 @@ const (
 )
 
 const (
+	//Kerberos principal parameter
+	KerberosPrincipal = "spark.kerberos.principal"
+	//Kerberos Keytab parameter
+	KerberosKeytab = "spark.kerberos.keytab"
+	//KDC krb5.conf parameter
+	KerberosKrb5Conf = "spark.kubernetes.kerberos.krb5.path"
+)
+
+const (
 	// GoogleApplicationCredentialsEnvVar is the environment variable used by the
 	// Application Default Credentials mechanism. More details can be found at
 	// https://developers.google.com/identity/protocols/application-default-credentials.
