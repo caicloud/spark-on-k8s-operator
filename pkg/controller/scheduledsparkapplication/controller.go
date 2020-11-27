@@ -251,6 +251,16 @@ func (c *Controller) createSparkApplication(
 	for key, value := range scheduledApp.Labels {
 		app.ObjectMeta.Labels[key] = value
 	}
+	app.Spec.Driver.Annotations = map[string]string{
+		"helm.sh/namespace": app.Namespace,
+		"helm.sh/path":      app.Name,
+		"helm.sh/release":   app.Name,
+	}
+	app.Spec.Executor.Annotations = map[string]string{
+		"helm.sh/namespace": app.Namespace,
+		"helm.sh/path":      app.Name,
+		"helm.sh/release":   app.Name,
+	}
 	app.ObjectMeta.Labels[config.ScheduledSparkAppNameLabel] = scheduledApp.Name
 	_, err := c.crdClient.SparkoperatorV1beta1().SparkApplications(scheduledApp.Namespace).Create(app)
 	if err != nil {

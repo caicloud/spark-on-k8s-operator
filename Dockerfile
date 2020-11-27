@@ -26,7 +26,10 @@ WORKDIR ${GOPATH}/src/github.com/GoogleCloudPlatform/spark-on-k8s-operator
 COPY Gopkg.toml Gopkg.lock ./
 RUN dep ensure -vendor-only
 COPY . ./
-RUN go generate && CGO_ENABLED=0 GOOS=linux go build -o /usr/bin/spark-operator
+
+RUN go generate
+RUN find ${GOPATH}/src/github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg -type f -print0 | xargs -0 sed -i  's/github\.com\/googlecloudplatform\/spark-on-k8s-operator/github\.com\/GoogleCloudPlatform\/spark-on-k8s-operator/g'
+RUN CGO_ENABLED=0 GOOS=linux go build -o /usr/bin/spark-operator
 
 FROM ${SPARK_IMAGE}
 COPY --from=builder /usr/bin/spark-operator /usr/bin/
